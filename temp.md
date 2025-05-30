@@ -1,0 +1,1 @@
+https://api.apilayer.com/spamchecker?threshold=threshold
