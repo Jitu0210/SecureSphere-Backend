@@ -27,7 +27,7 @@ const checkLink = async (req, res) => {
     const response = await axios.post(
       `https://safebrowsing.googleapis.com/v4/threatMatches:find?key=${process.env.GOOGLE_API_KEY}`,
       {
-        client: { clientId: "yourappname", clientVersion: "1.0.0" },
+        client: { clientId: "SecureSphere", clientVersion: "1.0.0" },
         threatInfo: {
           threatTypes: ["MALWARE", "SOCIAL_ENGINEERING", "UNWANTED_SOFTWARE"],
           platformTypes: ["ANY_PLATFORM"],
@@ -35,7 +35,7 @@ const checkLink = async (req, res) => {
           threatEntries: [{ url }],
         },
       }
-    );
+    )
 
     const isUnsafe = response.data && response.data.matches;
     const analyzedResult = isUnsafe ? "unsafe" : "safe";
