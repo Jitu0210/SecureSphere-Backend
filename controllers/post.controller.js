@@ -2,36 +2,58 @@ import Post from "../models/post.model.js";
 import cloudinary from "../utils/Cloudinary.js";
 import fs from "fs";
 
+// In your post.controller.js
 const createPost = async (req, res) => {
   try {
-    const file = req.file;
+    console.log('Request received - body:', req.body);
+    console.log('Request received - file:', req.file);
 
-    if (!file) {
+    if (!req.file) {
       return res.status(400).json({ error: "No image uploaded" });
     }
 
-    const result = await cloudinary.uploader.upload(file.path, {
+    // Verify Cloudinary config is working
+    console.log('Uploading to Cloudinary...');
+    const result = await cloudinary.uploader.upload(req.file.path, {
       folder: "posts",
+      resource_type: "auto"
     });
+    console.log('Cloudinary upload result:', result);
 
-    // Remove local file after uploading
-    fs.unlinkSync(file.path);
+    // Remove local file
+    fs.unlinkSync(req.file.path);
 
-    // Save post
     const newPost = new Post({
       title: req.body.title,
       description: req.body.description,
+      scamType: req.body.scamType,
       imageUrl: result.secure_url,
       imageId: result.public_id,
       userId: req.user._id,
     });
 
     await newPost.save();
+    console.log('Post saved successfully');
 
-    res.status(201).json(newPost);
+    res.status(201).json({
+      success: true,
+      post: newPost
+    });
+
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Internal server error" });
+    console.error('Error in createPost:', err);
+    
+    // Clean up files if they exist
+    if (req.file?.path && fs.existsSync(req.file.path)) {
+      fs.unlinkSync(req.file.path);
+    }
+
+    // Proper error response
+    res.status(500).json({ 
+      success: false,
+      error: "Internal server error",
+      message: err.message 
+    });
   }
 };
 
