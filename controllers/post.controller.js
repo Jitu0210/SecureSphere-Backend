@@ -2,7 +2,7 @@ import Post from "../models/post.model.js";
 import cloudinary from "../utils/Cloudinary.js";
 import fs from "fs";
 
-// In your post.controller.js
+
 const createPost = async (req, res) => {
   try {
     console.log('Request received - body:', req.body);
@@ -12,7 +12,7 @@ const createPost = async (req, res) => {
       return res.status(400).json({ error: "No image uploaded" });
     }
 
-    // Verify Cloudinary config is working
+    
     console.log('Uploading to Cloudinary...');
     const result = await cloudinary.uploader.upload(req.file.path, {
       folder: "posts",
@@ -20,7 +20,7 @@ const createPost = async (req, res) => {
     });
     console.log('Cloudinary upload result:', result);
 
-    // Remove local file
+    
     fs.unlinkSync(req.file.path);
 
     const newPost = new Post({
@@ -43,12 +43,12 @@ const createPost = async (req, res) => {
   } catch (err) {
     console.error('Error in createPost:', err);
     
-    // Clean up files if they exist
+   
     if (req.file?.path && fs.existsSync(req.file.path)) {
       fs.unlinkSync(req.file.path);
     }
 
-    // Proper error response
+    
     res.status(500).json({ 
       success: false,
       error: "Internal server error",
