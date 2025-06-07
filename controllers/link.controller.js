@@ -22,7 +22,6 @@ const checkLink = async (req, res) => {
       });
     }
 
-    // Call Google Safe Browsing API...
 
     const response = await axios.post(
       `https://safebrowsing.googleapis.com/v4/threatMatches:find?key=${process.env.GOOGLE_API_KEY}`,
@@ -50,8 +49,6 @@ const checkLink = async (req, res) => {
     return res.status(500).json({ error: "Internal server error." });
   }
 };
-
-
 
 
 const getHistory = async (req, res) => {

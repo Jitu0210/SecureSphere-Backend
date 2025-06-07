@@ -18,7 +18,6 @@ const createPost = async (req, res) => {
       folder: "posts",
       resource_type: "auto"
     });
-    console.log('Cloudinary upload result:', result);
 
     
     fs.unlinkSync(req.file.path);
