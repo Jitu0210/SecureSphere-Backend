@@ -5,15 +5,11 @@ import fs from "fs";
 
 const createPost = async (req, res) => {
   try {
-    console.log('Request received - body:', req.body);
-    console.log('Request received - file:', req.file);
 
     if (!req.file) {
       return res.status(400).json({ error: "No image uploaded" });
     }
 
-    
-    console.log('Uploading to Cloudinary...');
     const result = await cloudinary.uploader.upload(req.file.path, {
       folder: "posts",
       resource_type: "auto"
@@ -32,7 +28,6 @@ const createPost = async (req, res) => {
     });
 
     await newPost.save();
-    console.log('Post saved successfully');
 
     res.status(201).json({
       success: true,

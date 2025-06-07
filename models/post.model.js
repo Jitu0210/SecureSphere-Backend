@@ -10,6 +10,21 @@ const postSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    scamType: {
+      type: String,
+      enum: [
+        "Phishing",
+        "Investment Fraud",
+        "Tech Support Scam",
+        "Romance Scam",
+        "Job Scam",
+        "Shopping Scam",
+        "Lottery/Prize Scam",
+        "Identity Theft",
+        "Other",
+      ],
+      required: true,
+    },
     imageUrl: String,
     imageId: String,
     userId: {
